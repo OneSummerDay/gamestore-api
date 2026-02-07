@@ -27,4 +27,17 @@ app.MapPost("/games", (CreateGameDto newGame) =>
     return Results.Created($"/games/{game.Id}", game);
 });
 
+app.MapPut("/games/{id}", (int id, UpdateGameDto updatedGame) =>
+{
+    var game = games.FirstOrDefault(game => game.Id == id);
+    if (game is null)
+    {
+        return Results.NotFound();
+    }
+
+    var updatedGameDto = new GameDto(id, updatedGame.Name, updatedGame.Genre, updatedGame.Price, updatedGame.ReleaseDate);
+    games[games.IndexOf(game)] = updatedGameDto;
+    return Results.Ok(updatedGameDto);
+});
+
 app.Run();
