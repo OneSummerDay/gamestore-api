@@ -20,4 +20,12 @@ app.MapGet("/games/{id}", (int id) =>
     return game is not null ? Results.Ok(game) : Results.NotFound();
 });
 
+app.MapPost("/games", (GameDto newGame) =>
+{
+    int newId = games.Max(game => game.Id) + 1;
+    var gameToAdd = new GameDto(newId, newGame.Name, newGame.Genre, newGame.Price, newGame.ReleaseDate);
+    games.Add(gameToAdd);
+    return Results.Created($"/games/{newId}", gameToAdd);
+});
+
 app.Run();
