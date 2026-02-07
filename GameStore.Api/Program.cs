@@ -12,6 +12,12 @@ List<GameDto> games = new List<GameDto>
     new GameDto(5, "Minecraft", "Sandbox", 26.95, new DateOnly(2011, 11, 18))
 };
 
-app.MapGet("/games", () => "Hello World!");
+app.MapGet("/games", () => games);
+
+app.MapGet("/games/{id}", (int id) =>
+{
+    var game = games.FirstOrDefault(game => game.Id == id);
+    return game is not null ? Results.Ok(game) : Results.NotFound();
+});
 
 app.Run();
