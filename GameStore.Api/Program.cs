@@ -40,4 +40,16 @@ app.MapPut("/games/{id}", (int id, UpdateGameDto updatedGame) =>
     return Results.Ok(updatedGameDto);
 });
 
+app.MapDelete("/games/{id}", (int id) =>
+{
+    var game = games.FirstOrDefault(game => game.Id == id);
+    if (game is null)
+    {
+        return Results.NotFound();
+    }
+
+    games.Remove(game);
+    return Results.NoContent();
+});
+
 app.Run();
